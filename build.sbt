@@ -30,7 +30,9 @@ val commonDependencies = Seq(
 
 lazy val sparkTemplates = project.in(file(".")).settings(
   publishArtifact := false,
-  test := {})
+  test := {},
+  run in Compile := Defaults.runTask(fullClasspath in Compile, mainClass in(Compile, run), runner in(Compile, run)).evaluated,
+  assemblyMergeStrategy in assembly := (_ => MergeStrategy.first))
   .aggregate(scalaTemplate, javaTemplate)
 
 lazy val scalaTemplate = project

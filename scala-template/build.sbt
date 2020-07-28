@@ -16,13 +16,22 @@
  */
 
 organization := "com.github.scrapcodes"
-version      := "0.0.1-SNAPSHOT"
+version := "0.0.1-SNAPSHOT"
 scalaVersion := "2.12.10"
 
 val sparkVersion = "3.0.0"
 
 lazy val scalaTemplate = project.in(file(".")).settings(
-    libraryDependencies += ("org.apache.spark" %% "spark-sql" % sparkVersion),
-    libraryDependencies += ("com.amazonaws" % "aws-java-sdk" % "1.7.4"),
-    libraryDependencies += ("org.apache.hadoop" % "hadoop-aws" % "2.7.6")
-  )
+  assemblyMergeStrategy in assembly := {
+    case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.discard
+    case _ => MergeStrategy.first
+  },
+  // Exclude scala libs from assembly jar.
+  assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
+  // enable provided jar to be present during run.
+  run in Compile := Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run)).evaluated,
+  // Spark is set to provided as, we do not want it to be inlcuded in our assembly jar.
+  libraryDependencies += ("org.apache.spark" %% "spark-sql" % sparkVersion % "provided"),
+  libraryDependencies += ("org.apache.hadoop" % "hadoop-aws" % "2.7.6" excludeAll (
+    ExclusionRule(organization = "org.apache.hadoop")))
+)

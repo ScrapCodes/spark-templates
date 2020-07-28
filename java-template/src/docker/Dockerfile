@@ -17,7 +17,7 @@ ARG spark_uid=185
 
 RUN mkdir /opt/spark/work-dir/data/
 
-COPY target/scala-2.12/scalatemplate_2.12-0.0.1-SNAPSHOT.jar /opt/
+COPY target/spark-java-template-0.0.1-SNAPSHOT-jar-with-dependencies.jar /opt/
 COPY data/ /opt/spark/work-dir/data/
 
 ENV SPARK_HOME /opt/spark

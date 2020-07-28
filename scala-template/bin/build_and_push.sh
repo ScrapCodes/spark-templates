@@ -14,6 +14,6 @@
 # limitations under the License.
 set -ex
 
-sbt clean package
-docker build -t scrapcodes/custom-spark:v0.0.1 -f src/docker/Dockerfile .
-docker push scrapcodes/custom-spark:v0.0.1
+sbt clean assembly
+docker build -t my-repo/custom-spark:v0.0.1 -f src/docker/Dockerfile .
+docker push my-repo/custom-spark:v0.0.1
